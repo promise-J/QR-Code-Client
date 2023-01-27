@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import {useEffect, useState} from 'react'
 import './App.css';
+import axios from 'axios'
 
 function App() {
+  const [qCode, setQCode] = useState('')
+  useEffect(()=>{
+    const getQRCode = async()=>{
+      try {
+        const res = await axios.get("http://localhost:3000/qr-code?text=promise")
+        setQCode(res.data)
+        console.log(res.data)
+        return res
+      } catch (error) {
+        console.log(error, 'the error')
+      }
+    }
+    getQRCode()
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>This is the QR Code Scanner</h1>
+      <img src={qCode} alt='qrcode' />
     </div>
   );
 }
